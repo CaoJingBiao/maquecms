@@ -1,0 +1,69 @@
+{extend name="public:base"}
+{block name="main"}
+<div class="layui-form">
+  条件搜索：
+  <div class="layui-inline">
+    <input class="layui-input" name="start" id="start"  placeholder="请输入开始时间">
+  </div>
+  <div class="layui-inline">
+    <input class="layui-input" name="end" id="end"  placeholder="请输入结束时间">
+  </div>
+  <div class="layui-inline">
+      <input class="layui-input" name="keyword" id="keyword" autocomplete="off" placeholder="请输入关键字">
+  </div>
+  <div class="layui-inline">
+    <button class="layui-btn" lay-filter="submit" lay-submit>搜索</button>
+    <button class="layui-btn layui-btn-primary"  lay-filter="submit" lay-submit>重置</button>
+  </div>
+</div>
+
+<table class="layui-table" lay-data="{height:500,url:location.href, page:true, id:'table'}" lay-filter="table" lay-size="lg">
+  <thead>
+    <tr>
+      <th lay-data="{field:'msgid',width:75}">ID</th>
+      <th lay-data="{field:'name'}">姓名</th>
+      <th lay-data="{field:'sex',width:75}">性别</th>
+      <th lay-data="{field:'tel'}">手机号</th>
+      <th lay-data="{field:'email'}">邮箱</th>
+      <th lay-data="{field:'add'}">地址</th>
+      <th lay-data="{field:'msg'}">留言</th>
+      <th lay-data="{field:'content'}">内容</th>
+      <th lay-data="{field:'status',templet:'#status',width:105}">状态</th>
+      <th lay-data="{field:'addtime'}">留言时间</th>
+      <th lay-data="{field:'uptime'}">更新时间</th>
+      <th lay-data="{fixed: 'right', align:'center', toolbar: '#barDemo'}">操作</th>
+    </tr>
+  </thead>
+</table>
+
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-danger layui-btn-sm del" lay-event="del">删除</a>
+</script>
+
+<script>
+
+  layui.use(['table','laydate','form'], function(){
+
+    table = layui.table;
+    laydate = layui.laydate;
+    form = layui.form;
+
+    admin.init(['search','laydate','tool','switch']);
+
+  });
+
+</script>
+
+<script type="text/html" id="link">
+  <a href="{{d.link}}" class="layui-table-link" target="_blank">{{d.link}}</a>
+</script>
+<script type="text/html" id="src">
+  <img src='{{d.src}}' width="50px;">
+</script>
+<script type="text/html" id="status">
+ 
+    <input type="checkbox" name="status" lay-skin="switch" lay-text="已读|未读" lay-filter="status" value="{{d.msgid}}"  {{#  if(d.status == 1){ }} checked {{#  } }}>
+  
+</script>
+
+{/block}

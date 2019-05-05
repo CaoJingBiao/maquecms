@@ -1,0 +1,66 @@
+{extend name="public:base"}
+{block name="main"}
+<form class="layui-form">
+  <div class="demoTable">
+    条件搜索：
+    <div class="layui-inline">
+      <input class="layui-input" name="keyword" id="keyword" autocomplete="off" placeholder="请输入关键字">
+    </div>
+    <div class="layui-inline">
+      <input class="layui-input" name="start" id="start"  placeholder="请输入评论开始时间">
+    </div>
+    <div class="layui-inline">
+      <input class="layui-input" name="end" id="end"  placeholder="请输入评论结束时间">
+    </div>
+    <div class="layui-inline">
+      <button class="layui-btn" data-type="reload" lay-filter="search" lay-submit>搜索</button>
+      <button class="layui-btn layui-btn-primary" type="reset" data-type="reload" lay-filter="search" lay-submit>重置</button>
+    </div>
+
+  </div>
+</form>
+<table class="layui-table" lay-data="{height:650,url:location.href,where:{newsid:'{:input('newsid')}'}, page:true, id:'table'}" lay-filter="table">
+  <thead>
+    <tr>
+      <th lay-data="{field:'commentid', sort: true,width:75}">ID</th>
+      <th lay-data="{field:'newstitle'}">新闻标题</th>
+      <th lay-data="{field:'avatar',templet:'#avatar',width:75}">头像</th>
+      <th lay-data="{field:'nickname'}">昵称</th>
+      <th lay-data="{field:'content'}">评论内容</th>
+      <th lay-data="{field:'status',templet:'#status',width:105}">状态</th>
+      <th lay-data="{field:'addtime', sort: true}">评论时间</th>
+      <th lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}">操作</th>
+    </tr>
+  </thead>
+</table>
+
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-danger layui-btn-sm del" lay-event="del" lay-url='commentdel'>删除</a>
+</script>
+
+<script>
+layui.use(['table','laydate','form'], function(){
+  
+   table = layui.table;
+   laydate = layui.laydate;
+   form = layui.form;
+   
+   admin.init(['laydate','search','tool','switch']);
+
+});
+
+</script>
+
+
+<script type="text/html" id="avatar">
+  <img src='{{d.avatar}}'>
+</script>
+
+
+<script type="text/html" id="status">
+    <input type="checkbox" name="status" lay-skin="switch" lay-text="启用|禁用" lay-url='commentup' lay-filter="status" value="{{d.commentid}}" {{#  if(d.status == 1){ }} checked {{#  } }}>
+  
+</script>
+
+
+{/block}

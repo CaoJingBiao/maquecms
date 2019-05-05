@@ -1,0 +1,222 @@
+{extend name="public:base"/}
+{block name="style"}
+
+{/block}
+{block name="main"}
+
+<form class="layui-form" action="" method="POST" lay-filter="form">
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span class="form-required">*</span>模型名称</label>
+    <div class="layui-input-inline ">
+      <input type="hidden" name="modelid" value="">
+      <input type="text" name="name" lay-verify="required"  placeholder="请输入模型名称" autocomplete="off" class="layui-input" value="">
+    </div>
+  </div>
+  <div class="layui-form-item">
+      <label class="layui-form-label"><span class="form-required">*</span>类型</label>
+      <div class="layui-input-inline" >
+        <select name="type" lay-verify="required"  lay-filter="type" id="type" >
+          <option value="">请选择类型</option>
+          <option value="列表类型">列表类型</option>
+          <option value="单页类型">单页类型</option>
+            
+        </select>   
+      </div>
+  </div>
+
+  <!-- 单页模板列表 -->
+  <div class="layui-form-item selectlist" id="templatepage" style="display:none;">
+      <label class="layui-form-label">单页模板</label>
+      <div class="layui-input-inline" >
+        <select name="page" lay-verify="template" id="template_page">
+          <option value="">请选择单页模板</option>
+          
+        </select>   
+      </div>
+  </div>
+
+  <div class="layui-form-item selectlist"  id="templatelist" style="display:none;">
+     
+      <label class="layui-form-label">列表页模板</label>
+      <div class="layui-input-inline" >
+        <select name="list" lay-verify="template" id="template_list">
+          <option value="">请选择列表页模板</option>
+          
+        </select>   
+      </div>
+      <label class="layui-form-label">内容页模板</label>
+      <div class="layui-input-inline" >
+        <select name="content" lay-verify="template" id="template_content">
+          <option value="">请选择内容页模板</option>
+         
+        </select>   
+      </div>
+  </div>
+  <div class="layui-form-item">
+      <label class="layui-form-label">作者</label>
+      <div class="layui-input-inline" >
+        <select name="authorid" id="authorlist">
+          <option value="">请选择默认作者</option>
+          
+        </select>   
+      </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">排序</label>
+    <div class="layui-input-inline">
+      <input type="number" name="px"  placeholder="请输入数字排序" autocomplete="off" class="layui-input" value="{$info['px']}">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">评论</label>
+    <div class="layui-input-block">
+      <input type="radio" name="iscomment" value="1" title="开启" checked>
+      <input type="radio" name="iscomment" value="0" title="关闭" >
+    </div>
+  </div>
+  {notempty name="info['modelid']"}
+  <div class="layui-form-item">
+    <label class="layui-form-label">更新</label>
+    <div class="layui-input-inline">
+      <input type="checkbox" name="up" title="同时更新所有页面模板" lay-skin="primary" checked value="1">
+    </div>
+  </div>
+  {/notempty}
+  <!-- <div class="layui-form-item">
+    <label class="layui-form-label">状态</label>
+    <div class="layui-input-block">
+      <input type="checkbox" name="status" lay-skin="switch" lay-text="启用|禁用" lay-filter="switchTest" value="1" {if condition="($info['status'] eq '1') OR ($info['status'] neq '0')"}checked=''{/if}>
+      <div class="layui-unselect layui-form-switch" lay-skin="_switch">
+        <em>OFF</em><i></i>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="submit">立即提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript">
+  layui.use(['form','table'], function(){
+    
+    form = layui.form;
+    table = layui.table;
+
+    form.on('select(type)', function(data){
+
+      $(".selectlist").hide();
+      if(data.value=='单页类型'){
+        $("#templatepage").show();  
+      }else if(data.value=='列表类型'){
+        $("#templatelist").show();
+      }
+     
+    });  
+
+    admin.submit();
+
+    layer.photos({
+      photos: 'div'
+      ,anim: 5 
+    }); 
+
+    form.verify({
+      template: function(value,item){
+        var type=$("select[name='type']").val();  
+        if(type=='单页类型'){
+          
+          if($("select[name='page']").val()==''){
+            return "请选择单页模板！";
+          }
+        }else if(type=='列表类型'){
+          
+          /*if($("select[name='category']").val()==''){
+            return "请选择栏目页模板";
+          }*/
+          if($("select[name='list']").val()==''){
+            return "请选择列表页模板";
+          }
+          if($("select[name='content']").val()==''){
+            return "请选择内容页模板";
+          }
+        }
+        
+      }
+    });
+
+    obj = {
+
+      inc:function(data){
+
+        if(data.template.page.length > 0){
+
+          var template_page = '<option value="">请选择单页模板</option>';
+
+          for (var i in data.template.page){
+            template_page += '<option value="'+data.template.page[i]+'" >'+data.template.page[i]+'.html</option>';
+          }
+
+          $("#template_page").html(template_page);
+          
+        }
+
+        if(data.template.list.length > 0){
+
+          var template_list = '<option value="">请选择列表模板</option>';
+
+          for (var i in data.template.list){
+            template_list += '<option value="'+data.template.list[i]+'" >'+data.template.list[i]+'.html</option>';
+          }
+
+          $("#template_list").html(template_list);
+          
+        }
+
+        if(data.template.content.length > 0){
+
+          var template_content = '<option value="">请选择内容页模板</option>';
+
+          for (var i in data.template.content){
+            template_content += '<option value="'+data.template.content[i]+'" >'+data.template.content[i]+'.html</option>';
+          }
+
+          $("#template_content").html(template_content);
+          
+        }
+
+
+        switch(data.type){
+          case '列表类型':
+            $("#templatelist").show();
+          break;
+          case '单页类型':
+            $("#templatepage").show();
+          break;
+        }
+
+        if(data.authorlist.length > 0){
+
+          var authorlist = '<option value="">请选择作者</option>';
+
+          for (var i in data.authorlist){
+            authorlist += '<option value="'+data.authorlist[i].authorid+'" >'+data.authorlist[i].name+'</option>';
+          }
+          
+          $("#authorlist").html(authorlist);
+          
+        }
+
+      }
+
+    };
+
+    admin.edit(obj);
+
+  });
+</script>
+
+{/block}

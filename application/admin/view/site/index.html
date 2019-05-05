@@ -1,0 +1,119 @@
+{extend name="public:base"/}
+{block name="main"}
+
+<form class="layui-form" action="" method="POST" lay-filter="form">
+    <div class="layui-form-item">
+      <label class="layui-form-label">网站状态</label>
+      <div class="layui-input-block">
+        <input type="radio" name="status" value="开启" title="开启" checked >
+        <input type="radio" name="status" value="关闭" title="关闭" >
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">访问类型</label>
+      <div class="layui-input-block">
+        <input type="checkbox" name="type[pc]" title="电脑端" checked >
+        <input type="checkbox" name="type[mb]" title="手机端" >
+        <input type="checkbox" name="type[wx]" title="微信端" >
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">网站logo</label>
+      <div class="layui-input-inline" style="width:350px;">
+        <input type="text" name="logo"  lay-verify="logo" placeholder="logo图片地址" autocomplete="off" class="layui-input"  value="">
+      </div>
+      <div class="layui-word-aux">
+        <img src="" id="logo" style="width:35px;" >
+        <button type="button" class="layui-btn layui-btn-small fileupload" lay-data="{data:{type:'image'},accept:'images'}" data-name="logo">
+          <i class="layui-icon">&#xe64a;</i>上传Logo
+        </button>
+      </div>
+    </div>
+    
+    <div class="layui-form-item">
+      <label class="layui-form-label"><span class="form-required">*</span>站点名称</label>
+      <div class="layui-input-inline" style="width:350px;">
+        <input type="text" name="title" required lay-verify="required" placeholder="请输入站点名称" autocomplete="off" class="layui-input" value="" >
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label"><span class="form-required">*</span>站点域名</label>
+      <div class="layui-input-inline" style="width:350px;">
+        <input type="text" name="yuming" required lay-verify="required" placeholder="请输入站点域名" autocomplete="off" class="layui-input" value="" >
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label"><span class="form-required">*</span>站点关键字</label>
+      <div class="layui-input-inline" style="width:350px;">
+        <textarea name="keyword" required lay-verify="required" placeholder="站点关键字" class="layui-textarea"></textarea>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label"><span class="form-required">*</span>站点描述</label>
+      <div class="layui-input-inline" style="width:350px;">
+        <textarea name="descript" required lay-verify="required" placeholder="请输入站点描述" class="layui-textarea"></textarea>
+      </div>
+
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">统计代码</label>
+      <div class="layui-input-inline" style="width:350px;">
+      <textarea name="tongji"  placeholder="请输入统计代码" class="layui-textarea"></textarea>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">备案号</label>
+      <div class="layui-input-inline" style="width:350px;">
+        <input type="text" name="beian"  placeholder="请输入备案号" autocomplete="off" class="layui-input"  value="">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+      </div>
+    </div>
+</form>
+
+
+<script type="text/javascript">
+
+	layui.use(['form','upload'], function(){
+	  
+    form = layui.form
+    ,upload  = layui.upload;
+     
+     object = {
+      inc: function(res){
+        $("input[name='logo']").val(res.path);
+        $("#logo").attr("src",res.path);
+        $("#logo").show();
+      }
+     };
+
+    admin.fileupload(object);
+    
+    layer.photos({
+      photos: 'div'
+      ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+    }); 
+    
+    
+    var obj={
+
+    inc:function(data){
+
+        if(data.logo != ''){
+          $("#logo").attr('src',data.logo);
+        }
+
+      }
+    };
+    
+    admin.edit(obj);
+
+    admin.submit();
+
+	});
+</script>
+
+{/block}

@@ -1,0 +1,87 @@
+{extend name="public:base"/}
+{block name="main"}
+
+<form class="layui-form" action="" method="POST" lay-filter="form"> 
+    <div class="layui-form-item">
+      <label class="layui-form-label"><span class="form-required">*</span>角色名称</label>
+      <div class="layui-input-inline" style="width:350px;">
+        <input type="hidden" name="roleid" value="">
+        <input type="text" name="name" required lay-verify="required" placeholder="角色名称" autocomplete="off" class="layui-input"  value="" disabled>
+      </div>
+    </div>
+    <div class="layui-form-item" id="authdata">
+      <label class="layui-form-label"><b>菜单列表</b></label>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+  layui.use(['form','layedit','upload','table'], function(){
+
+    form = layui.form;
+    table = layui.table;
+
+    admin.submit();
+
+    var obj ={
+
+      inc : function(data){
+
+        if(Object.keys(data.menu.menu).length > 0){
+
+          var authdata = '';
+          var actinolist = data.menu.menu;
+
+
+          for(var i in actinolist){
+
+            if(Object.keys(actinolist[i].list).length > 0){
+
+                authdata +='<div class="layui-form-item"><label class="layui-form-label">'+actinolist[i].name+'</label><div class="layui-input-block">';
+
+                authdata += '<input type="hidden" name="menu['+i+'][action]" value="'+actinolist[i].actionid+'">';
+                authdata += '<input type="hidden" name="menu['+i+'][controller]" value="'+actinolist[i].controller+'">';
+                authdata += '<input type="hidden" name="menu['+i+'][name]" value="'+actinolist[i].name+'">';
+                authdata += '<input type="hidden" name="menu['+i+'][type]" value="'+actinolist[i].type+'">';
+  
+                    var input_data = '';
+                   
+                    $.each(actinolist[i].list, function(k,v){  
+
+                      var checked = '';
+
+                      if(data.menu.value.indexOf(','+v.actionid+',') != '-1'){
+                        checked = 'checked';
+                      }
+
+                      input_data += '<input type="checkbox" name="menu['+i+'][list]['+k+']" title="'+v.name+'" lay-skin="primary" lay-filter="ceshi" '+checked+' value="'+v.actionid+'">';
+
+                   });
+              
+                authdata += input_data+'</div></div>';
+
+              }
+
+            }
+
+            $("#authdata").after(authdata);
+
+        }
+
+      }
+
+    };
+
+    admin.edit(obj);
+
+  });  
+    
+</script>
+
+{/block}

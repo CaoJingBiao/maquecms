@@ -1,0 +1,59 @@
+{extend name="public:base"}
+{block name="main"}
+<div class="layui-form">
+  条件搜索：
+  <div class="layui-inline">
+    <input class="layui-input" name="start" id="start"  placeholder="请输入开始时间">
+  </div>
+  <div class="layui-inline">
+    <input class="layui-input" name="end" id="end"  placeholder="请输入结束时间">
+  </div>
+  <div class="layui-inline">
+    <input class="layui-input" name="keyword"  placeholder="请输入搜索关键字">
+  </div>
+  <div class="layui-inline">
+    <button class="layui-btn" lay-filter="search" lay-submit>搜索</button>
+    <button class="layui-btn layui-btn-primary"  lay-filter="search" lay-submit>重置</button>
+    <a href="javascript:LayerOpen('actionadd');" class="layui-btn">添加权限</a>
+  </div>
+
+</div>
+<table class="layui-table" lay-data="{height:500,url:location.href, page:true, id:'table'}" lay-filter="table" lay-size="lg">
+  <thead>
+    <tr>
+      <th lay-data="{field:'actionid'}">id</th>
+      <th lay-data="{field:'name'}">名称</th>
+      <th lay-data="{field:'controller'}">控制器</th>
+      <th lay-data="{field:'action'}">操作</th>
+      <th lay-data="{field:'type'}">类型</th>
+      <th lay-data="{field:'status',templet:'#status'}">状态</th>
+      <th lay-data="{field:'addtime'}">添加时间</th>
+    </tr>
+  </thead>
+</table>
+
+
+<script>
+layui.use(['table','laydate','form'], function(){
+  
+   table = layui.table;
+   laydate = layui.laydate;
+   form = layui.form;
+
+   admin.init(['laydate','search','tool','switch']);
+
+});
+</script>
+
+
+<script type="text/html" id="src">
+  <img src='{{d.src}}' width="50px;">
+</script>
+
+<script type="text/html" id="status">
+  
+    <input type="checkbox" name="status" lay-skin="switch" lay-url='actionup' lay-text="启用|禁用" lay-filter="status" value="{{d.actionid}}" {{#  if(d.status == 1){ }} checked {{#  } }}>
+ 
+</script>
+
+{/block}

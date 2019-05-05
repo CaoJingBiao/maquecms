@@ -1,0 +1,65 @@
+{extend name="public:base"}
+{block name="main"}
+<form class="layui-form">
+  <div class="demoTable">
+    条件搜索：
+   
+    <div class="layui-inline">
+      <input class="layui-input" name="keyword" id="keyword" autocomplete="off" placeholder="请输入关键字">
+    </div>
+    <div class="layui-inline">
+      <input class="layui-input" name="start" id="start"  placeholder="请输入添加开始时间">
+    </div>
+    <div class="layui-inline">
+      <input class="layui-input" name="end" id="end"  placeholder="请输入添加结束时间">
+    </div>
+    <div class="layui-inline">
+      <button class="layui-btn" lay-filter="search" lay-submit>搜索</button>
+      <button class="layui-btn layui-btn-primary"  lay-filter="search" lay-submit>重置</button>
+      <a href="javascript:LayerOpen('roleadd');" class="layui-btn">添加角色</a>
+    </div>
+
+  </div>
+</form>
+<table class="layui-table" lay-data="{height:650,url:location.href,where:{roleid:'{:input('roleid')}'}, page:true, id:'table'}" lay-filter="table" lay-size="lg">
+  <thead>
+    <tr>
+      <th lay-data="{field:'roleid'}">ID</th>
+      <th lay-data="{field:'px'}">排序</th>
+      <th lay-data="{field:'name'}">名称</th>
+      <th lay-data="{field:'status',templet:'#status'}">状态</th>
+      <th lay-data="{field:'addtime'}">添加时间</th>
+      <th lay-data="{fixed: 'right', width:160, align:'center', toolbar: '#barDemo'}">操作</th>
+    </tr>
+  </thead>
+</table>
+
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-xs edit" lay-event="edit" lay-url='roleedit'>编辑</a>
+  <a class="layui-btn layui-btn-xs open" lay-event="open" lay-url='rolemenu'>菜单</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs del" lay-event="del" lay-url='roledel'>删除</a>
+</script>
+
+<script>
+layui.use(['table','laydate','form'], function(){
+ 
+  table = layui.table;
+  laydate = layui.laydate;
+  form = layui.form;
+
+  admin.init(['laydate','search','switch','tool']);
+  
+
+
+});
+
+</script>
+
+<script type="text/html" id="status">
+
+    <input type="checkbox" name="status" lay-skin="switch" lay-url='roleup' lay-text="启用|禁用" lay-filter="status" value="{{d.roleid}}" {{#  if(d.status == '1'){ }} checked {{#  } }}>
+ 
+</script>
+
+
+{/block}

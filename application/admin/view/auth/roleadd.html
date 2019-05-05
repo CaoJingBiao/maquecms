@@ -1,0 +1,92 @@
+{extend name="public:base"/}
+{block name="main"}
+
+<form class="layui-form" action="" method="POST" lay-filter="form">
+      
+        <div class="layui-form-item">
+          <label class="layui-form-label"><span class="form-required">*</span>名称</label>
+          <div class="layui-input-inline" style="width:350px;">
+            <input type="text" name="name" required lay-verify="required" placeholder="名称" autocomplete="off" class="layui-input"  value="">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">排序</label>
+          <div class="layui-input-inline" style="width:350px;">
+            <input type="number" name="px"  placeholder="排序" autocomplete="off" class="layui-input"  value="">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label">状态</label>
+          <div class="layui-input-block">
+            <input type="checkbox" name="status" lay-skin="switch" lay-text="启用|禁用" lay-filter="switchTest" value="1" checked >
+            <div class="layui-unselect layui-form-switch" lay-skin="_switch">
+            	<em>OFF</em><i></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="layui-form-item" id="authdata">
+          <label class="layui-form-label"><b>权限列表</b></label>
+        </div>
+        
+        <div class="layui-form-item">
+          <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+          </div>
+        </div>
+</form>
+
+<script type="text/javascript">
+
+	layui.use(['form','layedit','upload'], function(){
+
+	  form = layui.form;
+
+
+    var obj ={
+      inc : function(data){
+
+        if(data.length > 0){
+
+          var authdata = '';
+
+          for(var i in data){
+
+            authdata +='<div class="layui-form-item"><label class="layui-form-label">'+data[i].name+'</label><div class="layui-input-block">';
+
+              authdata += '<input type="hidden" name="auth['+i+'][action]" value="'+data[i].actionid+'">';
+              authdata += '<input type="hidden" name="auth['+i+'][controller]" value="'+data[i].controller+'">';
+              authdata += '<input type="hidden" name="auth['+i+'][name]" value="'+data[i].name+'">';
+              authdata += '<input type="hidden" name="auth['+i+'][type]" value="'+data[i].type+'">';
+
+              if(data[i].list.length>0){
+
+                 var input_data = '';
+                 
+                 $.each(data[i].list, function(k,v){  
+
+                    input_data += '<input type="checkbox" name="auth['+i+'][list]['+k+']" title="'+v.name+'" lay-skin="primary" lay-filter="ceshi"  value="'+v.actionid+'">';
+
+                 });
+              }
+            
+            authdata += input_data+'</div></div>';
+
+          }
+
+          $("#authdata").after(authdata);
+        }
+
+      }
+
+    };
+
+    admin.edit(obj);
+    admin.submit();
+
+  });  
+	  
+</script>
+
+{/block}

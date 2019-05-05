@@ -1,0 +1,47 @@
+{extend name="public:base"}
+{block name="main"}
+<div class="demoTable">
+  <a  href="javascript:LayerOpen('authoradd');" class="layui-btn layui-btn-normal" data-type="reload" >添加作者</a>
+</div>
+<table class="layui-table" lay-data="{height:650,url:location.href, page:true, id:'table'}" lay-filter="table" lay-size="lg">
+  <thead>
+    <tr>
+      <th lay-data="{field:'authorid',width:75}">ID</th>
+      <th lay-data="{field:'px',width:75}">排序</th>
+      <th lay-data="{field:'pic',templet:'#pic',width:65}">头像</th>
+      <th lay-data="{field:'name'}">作者名称</th>
+      <th lay-data="{field:'status',templet:'#status',width:105}">状态</th>
+      <th lay-data="{field:'addtime'}">添加时间</th>
+      <th lay-data="{fixed: 'right',toolbar: '#barDemo'}">操作</th>
+    </tr>
+  </thead>
+</table>
+
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-sm edit" lay-event="edit" lay-url='authoredit'>编辑</a> 
+  <a class="layui-btn layui-btn-danger layui-btn-sm del" lay-event="del" lay-url='authordel' > 删除</a>
+</script>
+
+<script>
+layui.use(['table','laydate','form'], function(){
+  
+  table = layui.table;
+  laydate = layui.laydate;
+  form = layui.form;
+  
+  admin.init(['laydate','switch','tool']);
+
+});
+
+</script>
+
+<script type="text/html" id="pic">
+  <img src='{{d.pic}}' >
+</script>
+<script type="text/html" id="status">
+ 
+    <input type="checkbox" name="status" lay-skin="switch" lay-text="启用|禁用" lay-filter="status" lay-url="authorup" value="{{d.authorid}}"  {{#  if(d.status == 1){ }} checked {{#  } }}>
+ 
+</script>
+
+{/block}

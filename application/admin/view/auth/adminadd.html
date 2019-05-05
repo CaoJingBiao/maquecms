@@ -1,0 +1,163 @@
+{extend name="public:base"/}
+
+{block name="main"}
+
+<form class="layui-form" action="" method="POST" >
+
+        <div class="layui-form-item">
+          <label class="layui-form-label"><span class="form-required">*</span>管理员名称</label>
+          <div class="layui-input-inline" style="width:350px;">
+            <input type="text" name="nickname" required lay-verify="required" placeholder="名称" autocomplete="off" class="layui-input"  value="">
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label" ><span class="form-required">*</span>管理员头像</label>
+          <div class="layui-input-inline" >
+            <input type="text" name="avatar" required lay-verify="required" placeholder="管理员头像地址" autocomplete="off" class="layui-input"  value="">
+           
+          </div>
+          <div class="layui-input-inline" style="max-width:37px !important;display: none;" id="img-div">
+             <img src="" >
+          </div>
+          <div class="layui-input-inline" >
+            <button type="button" class="layui-btn layui-btn-small layui-btn-normal fileupload" lay-data="{data:{type:'image'},accept:'images'}" data-name="avatar">
+              <i class="layui-icon">&#xe64a;</i>上传图片
+            </button>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <label class="layui-form-label"><span class="form-required">*</span>账号</label>
+          <div class="layui-input-inline" style="width:350px;">
+            <input type="text" name="username" required lay-verify="required" placeholder="管理员账号" autocomplete="off" class="layui-input"  value="">
+          </div>
+
+        </div>
+
+        <div class="layui-form-item">
+
+          <label class="layui-form-label"><span class="form-required">*</span>密码</label>
+
+          <div class="layui-input-inline" style="width:350px;">
+        
+            <input type="password" name="password"  placeholder="请输入密码" autocomplete="off" class="layui-input"  value="">
+           
+          </div>
+
+        </div>
+
+        <div class="layui-form-item">
+
+          <label class="layui-form-label"><span class="form-required">*</span>所属角色</label>
+
+          <div class="layui-input-inline" style="width:350px;">
+
+            <select name="roleid" lay-verify="required" lay-filter="rolelist"  id="rolelist">
+                <option value="">请选择角色</option>
+            </select>     
+
+          </div>
+
+        </div>
+
+        <div class="layui-form-item">
+
+          <label class="layui-form-label">状态</label>
+
+          <div class="layui-input-block">
+
+            <input type="checkbox" name="status" lay-skin="switch" lay-text="启用|禁用" lay-filter="switchTest" value="1" checked>
+
+            <div class="layui-unselect layui-form-switch" lay-skin="_switch">
+
+              <em>OFF</em><i></i>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="layui-form-item" id="know">
+
+          <label class="layui-form-label">cas登录</label>
+
+          <div class="layui-input-inline">
+
+            <input type="radio" name="cas" value="1" title="开启" >
+
+            <input type="radio" name="cas" value="0" title="关闭" checked>
+
+          </div>
+
+          <div class="layui-form-mid layui-word-aux" id="tips"><i class="layui-icon">&#xe60b;</i></div>
+
+        </div>
+
+        <div class="layui-form-item">
+
+          <div class="layui-input-block">
+
+            <button class="layui-btn" lay-submit="" lay-filter="submit">立即提交</button>
+
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+
+          </div>
+
+        </div>
+
+</form>
+
+<script type="text/javascript">
+  
+
+  layui.use(['form','layer','table','upload'], function(){
+
+    form = layui.form
+    ,layer  = layui.layer
+    ,table  = layui.table
+    ,upload = layui.upload;
+
+    var tip_index = 0;
+    $(document).on('mouseenter', '#tips', function(){
+        tip_index = layer.tips('开启后一个用户名不能在两个地方同时登录~', '#tips', {time: 0});
+    }).on('mouseleave', '#tips', function(){
+        layer.close(tip_index);
+    });
+
+    var obj = {
+
+      inc : function(data){
+
+        if(data.length > 0){
+
+          var rolelist = '<option value="">请选择角色</option>';
+
+          for(i in data){
+
+            rolelist += '<option value="'+data[i].roleid+'">'+data[i].name+'</option>';
+             
+          }
+
+          $("#rolelist").html(rolelist);
+
+          form.render('select');
+          
+        }
+
+      }
+
+    };
+
+
+    admin.edit(obj);
+
+
+    admin.init(['fileupload','submit']);
+
+  });
+
+</script>
+
+
+
+{/block}

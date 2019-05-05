@@ -1,0 +1,55 @@
+{extend name="public:base"}
+{block name="main"}
+<div class="demoTable">
+  <a  href="javascript:LayerOpen('{:Url('modeladd')}');" class="layui-btn layui-btn-normal" data-type="reload" >添加模型</a>
+</div>
+<table class="layui-table" lay-data="{height:650,url:location.href, page:true, id:'table'}" lay-filter="table" lay-size="lg">
+  <thead>
+    <tr>
+      <th lay-data="{field:'modelid',width:75}">ID</th>
+      <th lay-data="{field:'px',width:75}">排序</th>
+      <th lay-data="{field:'name'}">模型名称</th>
+      <th lay-data="{field:'type'}">类型</th>
+      <th lay-data="{field:'page'}">单页模板</th>
+      <th lay-data="{field:'list'}">列表模板</th>
+      <th lay-data="{field:'content'}">内容模板</th>
+      <th lay-data="{field:'addtime'}">添加时间</th>
+      <th lay-data="{fixed: 'right',toolbar: '#barDemo'}">操作</th>
+    </tr>
+  </thead>
+</table>
+
+<script type="text/html" id="barDemo">
+  
+  <a class="layui-btn layui-btn-sm" lay-event="edit">编辑</a>
+   
+  <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">删除</a>
+
+</script>
+
+<script>
+layui.use(['table','laydate','form'], function(){
+   
+    table = layui.table;
+    laydate = layui.laydate;
+    form = layui.form;
+   
+    admin.laydate();
+  
+
+    table.on('tool(table)', function(obj){
+     
+      if(obj.event === 'del'){
+
+        admin.delete({ url : 'modeldel', obj : obj});
+        
+      } else if(obj.event === 'edit'){
+          LayerOpen("modeledit/modelid/"+obj.data.modelid);
+      }
+
+    });
+
+});
+
+</script>
+{/block}
